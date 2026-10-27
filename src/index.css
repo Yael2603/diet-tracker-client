@@ -1,0 +1,265 @@
+/* ===== צבעים ומשתנים ===== */
+:root {
+  --bg: #f4f7f5;
+  --card: #ffffff;
+  --text: #1f2a24;
+  --muted: #5f6f66;
+  --border: #dce5df;
+  --primary: #2f855a;
+  --primary-dark: #276749;
+  --primary-light: #e6f4ec;
+  --danger: #c53030;
+  --danger-light: #fdecec;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  font-family: "Segoe UI", Arial, Tahoma, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  direction: rtl;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* ===== פריסה כללית ===== */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+/* ===== כותרת וניווט ===== */
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 12px 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--primary);
+}
+
+header span {
+  color: var(--muted);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+nav a {
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: var(--primary-light);
+}
+
+nav a.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: bold;
+}
+
+header > button {
+  margin-inline-start: auto;
+}
+
+/* ===== כותרות וטקסט ===== */
+h2 {
+  margin: 28px 0 12px;
+  font-size: 22px;
+  color: var(--primary-dark);
+}
+
+h3 {
+  margin: 24px 0 10px;
+  font-size: 18px;
+}
+
+p {
+  margin: 6px 0;
+}
+
+a {
+  color: var(--primary);
+}
+
+/* ===== רשימות ככרטיסים ===== */
+main ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+main li {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+}
+
+main li button,
+main li a {
+  margin-inline-start: 10px;
+}
+
+/* רשימה פנימית (פריטי תפריט בתוך תפריט) */
+main li ul {
+  margin-top: 8px;
+}
+
+main li li {
+  background: var(--bg);
+  box-shadow: none;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+/* ===== טפסים ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 8px 0 16px;
+  box-shadow: var(--shadow);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+label:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--primary-light);
+  border-color: var(--primary);
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+/* שדות שעומדים לבד, מחוץ לטופס (חיפוש, בחירת תאריך) */
+main > input,
+main > label {
+  max-width: 320px;
+  margin: 8px 0;
+}
+
+/* הודעות שגיאה בתוך טופס */
+form p {
+  margin: 0;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+/* ===== כפתורים ===== */
+button {
+  font: inherit;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* כפתורים משניים: בתוך רשימות ובכותרת */
+main li button,
+header > button,
+form > button[type="button"] {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+main li button:hover,
+header > button:hover,
+form > button[type="button"]:hover {
+  background: var(--primary-light);
+}
+
+/* ===== מסך כניסה ===== */
+main > form:only-child {
+  margin: 48px auto;
+}
+
+/* ===== מסך צר (טלפון) ===== */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 16px;
+  }
+
+  main {
+    padding: 16px 12px 40px;
+  }
+
+  form {
+    max-width: 100%;
+  }
+}
