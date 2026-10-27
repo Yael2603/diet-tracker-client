@@ -1,0 +1,17 @@
+# הגדרות פריסה ל-Render (Blueprint) – אתר סטטי של צד הלקוח
+services:
+  - type: web
+    name: diet-tracker-client
+    runtime: static
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    # כל כתובת באתר מחזירה את index.html, כדי ש-React Router יטפל בה (רענון של /meals לא יחזיר 404)
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://diet-tracker-api-7m6m.onrender.com
