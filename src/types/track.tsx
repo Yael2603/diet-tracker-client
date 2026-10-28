@@ -84,3 +84,29 @@ export interface PlanResponse {
     "track": TrackProps,
     "menu": MenuProps | null
 }
+
+export interface TrackData {
+    "name": string,
+    "description": string,
+    "type": TrackType,
+    "difficulty": Difficulty,
+    "dailyCalories": number,
+    "durationWeeks": number
+}
+
+export interface TrackFormProps {
+    "track"?: TrackProps,
+    "onDone": () => void
+}
+
+export interface FoodData {
+    "name": string,
+    "category": string,
+    "servingDescription": string,
+    "caloriesPerServing": number
+}
+
+export interface FoodFormProps {
+    "food"?: FoodItemProps,
+    "onDone": () => void
+}

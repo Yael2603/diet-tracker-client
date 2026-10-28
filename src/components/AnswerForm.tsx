@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { answerConsultation } from "../api/consultations";
 import { showServerErrors } from "../utils/formErrors";
-import type { Consultation, AnswerData } from "../types/consultations";
+import type { Consultation, AnswerData, AnswerFormProps } from "../types/consultations";
 import type { ApiError } from "../types/common";
 
-function AnswerForm({ id }: { id: number }) {
+function AnswerForm({ id }: AnswerFormProps) {
     
     const { register, handleSubmit, setError, reset, formState: { errors } } = useForm<AnswerData>();
     const queryClient = useQueryClient();

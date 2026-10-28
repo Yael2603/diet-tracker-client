@@ -20,3 +20,7 @@ export interface ConsultationData {
 export interface AnswerData {
   answer: string;
 }
+
+export interface AnswerFormProps {
+  id: number;
+}
