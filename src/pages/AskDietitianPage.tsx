@@ -29,8 +29,6 @@ function AskDietitianPage() {
 
     const queryClient = useQueryClient();
 
-
-
     const mutation = useMutation<Consultation, ApiError, ConsultationData>({
         mutationKey: ["consulations"],
         mutationFn: sendConsultation,
@@ -41,13 +39,10 @@ function AskDietitianPage() {
         onError: (error) => showServerErrors(error, setError)
     })
 
-
-
     if (!dashboard)
         return <p>טוען...</p>;
 
     const canSend = dashboard.user.shareWithDietitian;
-
 
     return <>
         <h2>פנייה לדיאטן</h2>
@@ -94,7 +89,6 @@ function AskDietitianPage() {
                 כדי לשלוח פנייה יש להפעיל שיתוף מידע עם הדיאטן. <Link to="/">לבית שלי</Link>
             </p>
         )}
-
 
     </>
 }

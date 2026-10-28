@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { UserContext } from "./context/userContext";
 import type{ Role } from "./types/common";
 
-
 export const UserProtected = ({ type }: { type: Role[] }) => {
   const{user,isLoading}=useContext(UserContext);
   if(isLoading) return <>טוען...</>

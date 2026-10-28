@@ -8,7 +8,6 @@ import type { ApiError } from "../../types/common";
 function UsersListPage() {
     const [search, setSearch] = useState("");
 
-
     const { data: users, isLoading, error } = useQuery({
         queryKey: ["users", search],
         queryFn: () => getUsers(search),
@@ -23,7 +22,6 @@ function UsersListPage() {
             queryClient.invalidateQueries({ queryKey: ["users"] })
         }
     })
-
 
     if (isLoading) return <p>טוען...</p>
     if (error) return <p>{error.message}</p>
@@ -48,7 +46,6 @@ function UsersListPage() {
             </ul>
         </>
     )
-
 
 }
 export default UsersListPage;

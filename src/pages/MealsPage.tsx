@@ -62,12 +62,9 @@ function MealsPage() {
 
     
 
-
-
     if (isLoading) return <p>טוען...</p>;
     if (error) return <p>שגיאה: {error.message}</p>;
     if (!day) return <p>לא נמצאו נתונים</p>;
-
 
     return (
         <>

@@ -19,7 +19,6 @@ export interface TrackProps {
     "updatedAt": string
 }
 
-
 export interface FoodItemProps {
     "id": number,
     "name": string,
@@ -31,7 +30,6 @@ export interface FoodItemProps {
     "createdAt": string,
     "updatedAt": string
 }
-
 
 export interface FoodShortProps {
     "id": number,

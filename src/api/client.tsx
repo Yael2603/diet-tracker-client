@@ -26,4 +26,3 @@ export async function apiFetch <T>  (path: string, options: RequestInit ={}): Pr
     return response.json() as Promise<T>;
 };
 
-

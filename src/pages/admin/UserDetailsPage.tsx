@@ -24,12 +24,9 @@ function UserDetailsPage() {
         enabled: isShare,
     })
 
-
-
     if (isLoading) return <p>טוען...</p>
     if (error) return <p>{error.message}</p>
     if (!details) return <>אין נתונים</>
-
 
     if (!details.sharing)
         return <>
