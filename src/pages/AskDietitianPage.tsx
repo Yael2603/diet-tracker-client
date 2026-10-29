@@ -9,8 +9,8 @@ import type { ApiError } from "../types/common";
 
 function AskDietitianPage() {
 
-    const { data: consulations } = useQuery({
-        queryKey: ["consulations"],
+    const { data: consultations } = useQuery({
+        queryKey: ["consultations"],
         queryFn: () => getConsultations()
     });
 
@@ -30,10 +30,10 @@ function AskDietitianPage() {
     const queryClient = useQueryClient();
 
     const mutation = useMutation<Consultation, ApiError, ConsultationData>({
-        mutationKey: ["consulations"],
+        mutationKey: ["consultations"],
         mutationFn: sendConsultation,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["consulations"] });
+            queryClient.invalidateQueries({ queryKey: ["consultations"] });
             reset();
         },
         onError: (error) => showServerErrors(error, setError)
@@ -47,11 +47,11 @@ function AskDietitianPage() {
     return <>
         <h2>פנייה לדיאטן</h2>
         <h3>הפניות שלי</h3>
-        {consulations?.length === 0 ? (
+        {consultations?.length === 0 ? (
             <p>עדיין לא נשלחו פניות</p>
         ) : (
             <ul>
-                {consulations?.map((c) => (
+                {consultations?.map((c) => (
                     <li key={c.id}>
                         <h3>{c.subject}</h3>
                         <p>{c.message}</p>

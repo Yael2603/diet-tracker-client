@@ -13,7 +13,7 @@ function AnswerForm({ id }: AnswerFormProps) {
     const mutation = useMutation<Consultation, ApiError, AnswerData>({
         mutationFn: (data) => answerConsultation(id, data.answer),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["consulations"] });
+            queryClient.invalidateQueries({ queryKey: ["consultations"] });
             queryClient.invalidateQueries({ queryKey: ["users"] });
             reset();
         },

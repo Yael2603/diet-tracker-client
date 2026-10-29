@@ -8,6 +8,11 @@ import type { MealData } from "../types/meals";
 import type { ApiError } from "../types/common";
 import { showServerErrors } from "../utils/formErrors";
 import { todayString } from "../utils/dates";
+import { EmptyPlate, MealIcon } from "../components/Illustrations";
+import type { MealType } from "../types/meals";
+
+const MEAL_ORDER: MealType[] = ["BREAKFAST", "LUNCH", "SNACK", "DINNER"];
+const MEAL_LABELS: Record<MealType, string> = { BREAKFAST: "בוקר", LUNCH: "צהריים", SNACK: "ביניים", DINNER: "ערב" };
 
 function MealsPage() {
     const [date, setDate] = useState(todayString());
@@ -68,69 +73,112 @@ function MealsPage() {
 
     return (
         <>
-            <h2>יומן אכילה</h2>
-            <label>בחירת תאריך:
-                <input type="date" value={date} max={todayString()} onChange={(e) => setDate(e.target.value)} />
-            </label>
-            <h3>סיכום היום</h3>
-            <p>קלוריות: {day.totalCalories}{day.targetCalories && <> מתוך {day.targetCalories}</>}</p>
-            <p>ציון: {day.score === null ? "-" : day.score} · {day.statusLabel}</p>
-            <h3>התפריט שלי להיום{day.menu && <> · {day.menu.name}</>}</h3>
-            {!day.menu && <p>לא נבחר תפריט</p>}
-            <ul>
-                {day.menuItems.map((item) => (
-                    <li key={item.id}>
-                        {item.mealTypeLabel}: {item.food.name}, {item.servings} מנות ({item.calories} קלוריות)
-                        {item.eaten ? (
-                            <span> ✓ נאכל</span>
-                        ) : (
-                            <button type="button" onClick={() => ated.mutate(item.id)} disabled={ated.isPending}>
-                                אכלתי ✓
-                            </button>
-                        )}
-                    </li>
-                ))}
-            </ul>
+            <div className="page-head">
+                <h1>יומן אכילה</h1>
+                <label className="date-pick">תאריך
+                    <input type="date" value={date} max={todayString()} onChange={(e) => setDate(e.target.value)} />
+                </label>
+            </div>
 
-            <h3>הוספת ארוחה</h3>
-            <input placeholder="חיפוש מאכל" value={search} onChange={(e) => setSearch(e.target.value)} />
-            <form onSubmit={handleSubmit((data) => addMutation.mutate({ ...data, date }))}>
-                <select {...register("foodId", { required: "יש לבחור מאכל", valueAsNumber: true })}>
-                    <option value="">בחר מאכל</option>
-                    {foods.map((food) => (
-                        <option key={food.id} value={food.id}>
-                            {food.name} ({food.servingDescription}, {food.caloriesPerServing} קל')
-                        </option>
-                    ))}
-                </select>
-                {errors.foodId && <p>{errors.foodId.message}</p>}
+            <div className="stats">
+                <div className="stat"><span>קלוריות</span><b>{day.totalCalories.toLocaleString()}</b>{day.targetCalories && <small>מתוך {day.targetCalories.toLocaleString()}</small>}</div>
+                <div className="stat"><span>ציון יומי</span><b>{day.score === null ? "–" : day.score}</b><small>{day.statusLabel}</small></div>
+                {day.menuAdherence && <div className="stat"><span>עמידה בתפריט</span><b>{day.menuAdherence.eaten}/{day.menuAdherence.total}</b><small>פריטים</small></div>}
+            </div>
 
-                <select {...register("mealType")}>
-                    <option value="BREAKFAST">בוקר</option>
-                    <option value="LUNCH">צהריים</option>
-                    <option value="DINNER">ערב</option>
-                    <option value="SNACK">ביניים</option>
-                </select>
+            <div className="cols">
+                <section className="panel">
+                    <h2>התפריט שלי</h2>
+                    {!day.menu ? (
+                        <p className="sub">לא נבחר תפריט</p>
+                    ) : (
+                        <>
+                            <p className="sub">{day.menu.name}</p>
+                            {MEAL_ORDER.map((type) => {
+                                const items = day.menuItems.filter((item) => item.mealType === type);
+                                if (items.length === 0) return null;
+                                return (
+                                    <div key={type} className="meal-block">
+                                        <div className="meal-head"><MealIcon type={type} /><b>{MEAL_LABELS[type]}</b></div>
+                                        <ul className="checklist">
+                                            {items.map((item) => (
+                                                <li key={item.id} className={item.eaten ? "done" : ""}>
+                                                    {item.eaten ? (
+                                                        <span className="check" aria-label="נאכל">✓</span>
+                                                    ) : (
+                                                        <button type="button" className="check" aria-label={`אכלתי ${item.food.name}`}
+                                                            onClick={() => ated.mutate(item.id)} disabled={ated.isPending} />
+                                                    )}
+                                                    <span className="name">{item.food.name}, {item.servings} מנות</span>
+                                                    <span className="kcal">{item.calories}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )}
+                </section>
 
-                <input type="number" step="0.25" min="0.25" {...register("servings", { required: "יש להזין כמות", valueAsNumber: true })} />
-                {errors.servings && <p>{errors.servings.message}</p>}
+                <section className="panel">
+                    <h2>הוספת ארוחה</h2>
+                    <p className="sub">מאכל שלא מופיע בתפריט</p>
+                    <label>חיפוש מאכל
+                        <input placeholder="למשל: לחם" value={search} onChange={(e) => setSearch(e.target.value)} />
+                    </label>
+            <form className="inline-form" onSubmit={handleSubmit((data) => addMutation.mutate({ ...data, date }))}>
+                        <select {...register("foodId", { required: "יש לבחור מאכל", valueAsNumber: true })}>
+                            <option value="">בחר מאכל</option>
+                            {foods.map((food) => (
+                                <option key={food.id} value={food.id}>
+                                    {food.name} ({food.servingDescription}, {food.caloriesPerServing} קל')
+                                </option>
+                            ))}
+                        </select>
+                        {errors.foodId && <p>{errors.foodId.message}</p>}
 
-                {errors.root && <p>{errors.root.message}</p>}
-                <button type="submit" disabled={addMutation.isPending}>הוספה</button>
-            </form>
+                        <select {...register("mealType")}>
+                            <option value="BREAKFAST">בוקר</option>
+                            <option value="LUNCH">צהריים</option>
+                            <option value="DINNER">ערב</option>
+                            <option value="SNACK">ביניים</option>
+                        </select>
 
-            <h3>הארוחות שלי</h3>
-            {day.meals.length === 0 && <p>עוד לא נרשמו ארוחות</p>}
-            <ul>
-                {day.meals.map((meal) => (
-                    <li key={meal.id}>
-                        {meal.mealTypeLabel}: {meal.food.name}, {meal.servings} מנות, {meal.calories} קלוריות · {meal.sourceLabel}
-                        <button type="button" onClick={() => deleteMutation.mutate(meal.id)} disabled={deleteMutation.isPending}>
-                            מחיקה
-                        </button>
-                    </li>
-                ))}
-            </ul>
+                        <input type="number" step="0.25" min="0.25" {...register("servings", { required: "יש להזין כמות", valueAsNumber: true })} />
+                        {errors.servings && <p>{errors.servings.message}</p>}
+
+                        {errors.root && <p>{errors.root.message}</p>}
+                        <button type="submit" disabled={addMutation.isPending}>הוספה</button>
+                    </form>
+                </section>
+            </div>
+
+            {day.meals.length === 0 ? (
+                <section className="empty">
+                    <EmptyPlate />
+                    <div>
+                        <h2>עוד לא נרשמו ארוחות ביום הזה</h2>
+                        <p>אפשר לסמן פריטים מהתפריט, או לחפש מאכל ולהוסיף אותו.</p>
+                    </div>
+                </section>
+            ) : (
+                <section className="panel">
+                    <h2>הארוחות שלי</h2>
+                    <ul className="rows">
+                        {day.meals.map((meal) => (
+                            <li key={meal.id}>
+                                <span className="tag">{meal.mealTypeLabel}</span>
+                                <span className="name">{meal.food.name}, {meal.servings} מנות</span>
+                                <span className="kcal">{meal.calories} קל׳ · {meal.sourceLabel}</span>
+                                <button type="button" className="btn small" onClick={() => deleteMutation.mutate(meal.id)} disabled={deleteMutation.isPending}>
+                                    מחיקה
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )}
         </>
     );
 }

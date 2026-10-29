@@ -10,7 +10,7 @@ function AnswerUsersPage() {
     const [openId, setOpenId] = useState<number | null>(null);
 
     const { data: consultations, isLoading, error } = useQuery({
-        queryKey: ["consulations", status],
+        queryKey: ["consultations", status],
         queryFn: () => getConsultations(status || undefined)
     });
 
